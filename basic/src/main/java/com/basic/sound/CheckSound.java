@@ -8,9 +8,15 @@ package com.basic.sound;
  */
 public class CheckSound implements Runnable {
 
+	public CheckSound() {
+		
+	}
+	
 	@Override
 	public void run() {
-		
+		while(true) {
+			System.out.println("检测是否有语音录入");
+		}
 	}
 	
 }

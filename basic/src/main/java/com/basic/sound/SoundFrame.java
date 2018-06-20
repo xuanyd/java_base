@@ -68,7 +68,7 @@ public class SoundFrame {
 
 		pan = new JPanel() {
 			private static final long serialVersionUID = 1L;
-			
+
 			public void paint(Graphics g) {
 				System.out.println("重绘");
 				g.setColor(Color.WHITE);
@@ -213,57 +213,29 @@ public class SoundFrame {
 					}
 				}
 			}.start();
-
+			new Thread(new CheckSound()).start();
 			// 起线程，监听数据，截取指令
 			new Thread() {
 				@Override
 				public void run() {
 					while (true) {
-						while (true) {
-							if (!continueRecorde) {
-								try {
-									Thread.sleep(50);
-								} catch (InterruptedException ie) {
-								}
-								continue;
-							}
-							
+						if (!continueRecorde) {
 							try {
-								Thread.sleep(1000 * 20);
-							} catch (InterruptedException e) {
-								e.printStackTrace();
+								Thread.sleep(50);
+							} catch (InterruptedException ie) {
 							}
-							System.out.println("保存文件了---");
-							byte[] bt = new byte[bufferAllIndex];
-							System.arraycopy(bufferAll, 0, bt, 0, bufferAllIndex);
-							ByteArrayInputStream bis = new ByteArrayInputStream(bt);
-							AudioFormat af = SoundUtil.getAudioFormat();
-							AudioInputStream ais = new AudioInputStream(bis, af, bt.length / af.getFrameSize());
-							System.out.println("bt size: " + bt.length);
-							File file = null;
-							File filePath = new File("D:/AudioFile");
-							if (!filePath.exists()) {
-								filePath.mkdirs();
-							}
-							long time = System.currentTimeMillis();
-							file = new File(filePath + "/" + time + ".wav");
-							try {
-								AudioSystem.write(ais, AudioFileFormat.Type.WAVE, file);
-							} catch (IOException e) {
-								e.printStackTrace();
-							} finally {
-								try {
-									if (bis != null) {
-										bis.close();
-									}
-									if (ais != null) {
-										ais.close();
-									}
-								} catch (Exception e) {
-									e.printStackTrace();
-								}
-							}
+							continue;
 						}
+
+						try {
+							Thread.sleep(1000 * 20);
+						} catch (InterruptedException e) {
+							e.printStackTrace();
+						}
+						System.out.println("保存文件了---");
+						byte[] bt = new byte[bufferAllIndex];
+						System.arraycopy(bufferAll, 0, bt, 0, bufferAllIndex);
+						SoundUtil.saveSound(bt);
 					}
 				}
 			}.start();
