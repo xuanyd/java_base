@@ -30,7 +30,7 @@ import javax.swing.JSlider;
 
 public class SoundFrame {
 
-	final int panHeight = 200;
+	final int panHeight = 400;
 	int vRate, hRate;
 
 	JFrame jFrame;
@@ -46,7 +46,10 @@ public class SoundFrame {
 	byte bufferAll[];
 	int bufferAllIndex;
 	boolean continueRecorde;
-
+	boolean ifSoundContinue;
+	long soundBeginTime;
+	int soundBeginIndex;
+	
 	public void initData() {
 		point = new int[600];
 		Arrays.fill(point, 0);
@@ -58,6 +61,9 @@ public class SoundFrame {
 		continueRecorde = false;
 		// continueReplay = false;
 		// jsbActive = true;
+		ifSoundContinue = false;
+		soundBeginTime = 0;
+		soundBeginIndex = 0;
 	}
 
 	public SoundFrame() {
@@ -70,7 +76,6 @@ public class SoundFrame {
 			private static final long serialVersionUID = 1L;
 
 			public void paint(Graphics g) {
-				System.out.println("重绘");
 				g.setColor(Color.WHITE);
 				g.fillRect(0, 0, this.getWidth(), this.getHeight());
 				g.setColor(Color.red);
@@ -176,12 +181,38 @@ public class SoundFrame {
 							}
 							continue;
 						}
+						
 						synchronized (bufferAll) {
 							if (600 * hRate * 2 < bufferAllIndex) {
 								int beginIndex = bufferAllIndex - 600 * hRate * 2;
+								//System.out.println("beginIndex: " + beginIndex);
 								for (int i = 0; i < 600; i++, beginIndex += 2 * hRate) {
 									int hBit = bufferAll[beginIndex];
 									int lBit = bufferAll[beginIndex + 1];
+									int abs = Math.abs(hBit) + Math.abs(lBit);
+									if(abs > 120) {
+										if(!ifSoundContinue) {
+											ifSoundContinue = true;
+											soundBeginTime = System.currentTimeMillis();
+											soundBeginIndex = beginIndex;
+											System.out.println("soundBeginIndex: " + soundBeginIndex);
+										}
+									} else {
+										if(ifSoundContinue ) {
+											if(System.currentTimeMillis() - soundBeginTime > 200) {
+												ifSoundContinue = false;
+												soundBeginTime = System.currentTimeMillis();
+												int longth = beginIndex - soundBeginIndex;
+												System.out.println("区间：" + longth);
+												if(longth < 0)
+													continue;
+												byte[] bt = new byte[beginIndex - soundBeginIndex];
+												System.arraycopy(bufferAll, beginIndex, bt, 0, beginIndex - soundBeginIndex);
+												SoundUtil.saveSound(bt);
+											} 
+										}
+									}
+									
 									point[i] = hBit << 8 | lBit;
 									point[i] /= vRate;
 									point[i] += panHeight / 2;
@@ -189,11 +220,13 @@ public class SoundFrame {
 								number = 600;
 								pan.repaint();
 							} else {
+								System.out.println("-----------");
 								int beginIndex = 0;
 								number = bufferAllIndex / hRate / 2;
 								for (int i = 0; i < number; i++, beginIndex += 2 * hRate) {
 									int hBit = bufferAll[beginIndex];
 									int lBit = bufferAll[beginIndex + 1];
+//									System.out.println("2 hBit: " + hBit + " lBit: " + lBit);
 									point[i] = hBit << 8 | lBit;
 									point[i] /= vRate;
 									point[i] += panHeight / 2;
@@ -232,10 +265,6 @@ public class SoundFrame {
 						} catch (InterruptedException e) {
 							e.printStackTrace();
 						}
-						System.out.println("保存文件了---");
-						byte[] bt = new byte[bufferAllIndex];
-						System.arraycopy(bufferAll, 0, bt, 0, bufferAllIndex);
-						SoundUtil.saveSound(bt);
 					}
 				}
 			}.start();

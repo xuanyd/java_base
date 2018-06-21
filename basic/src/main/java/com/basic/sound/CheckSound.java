@@ -15,7 +15,7 @@ public class CheckSound implements Runnable {
 	@Override
 	public void run() {
 		while(true) {
-			System.out.println("检测是否有语音录入");
+			//System.out.println("检测是否有语音录入");
 		}
 	}
 	
