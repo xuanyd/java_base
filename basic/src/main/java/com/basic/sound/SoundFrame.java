@@ -28,6 +28,8 @@ import javax.swing.JPanel;
 import javax.swing.JScrollBar;
 import javax.swing.JSlider;
 
+import com.basic.sound.util.SoundUtil;
+
 public class SoundFrame {
 
 	final int panHeight = 400;
@@ -190,7 +192,7 @@ public class SoundFrame {
 									int hBit = bufferAll[beginIndex];
 									int lBit = bufferAll[beginIndex + 1];
 									int abs = Math.abs(hBit) + Math.abs(lBit);
-									if(abs > 120) {
+									if(abs > 130) {
 										if(!ifSoundContinue) {
 											ifSoundContinue = true;
 											soundBeginTime = System.currentTimeMillis();
@@ -199,7 +201,7 @@ public class SoundFrame {
 										}
 									} else {
 										if(ifSoundContinue ) {
-											if(System.currentTimeMillis() - soundBeginTime > 200) {
+											if(System.currentTimeMillis() - soundBeginTime > 800) {
 												ifSoundContinue = false;
 												soundBeginTime = System.currentTimeMillis();
 												int longth = beginIndex - soundBeginIndex;

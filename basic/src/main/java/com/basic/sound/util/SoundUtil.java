@@ -1,4 +1,4 @@
-package com.basic.sound;
+package com.basic.sound.util;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
