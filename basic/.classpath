@@ -23,5 +23,7 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="D:/private/java_base/lib/aip-java-sdk-4.1.1.jar"/>
+	<classpathentry kind="lib" path="D:/private/java_base/lib/json-20160810.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

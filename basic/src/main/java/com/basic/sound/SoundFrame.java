@@ -29,6 +29,7 @@ import javax.swing.JScrollBar;
 import javax.swing.JSlider;
 
 import com.basic.sound.util.SoundUtil;
+import com.basic.sound.util.XFApi;
 
 public class SoundFrame {
 
@@ -197,7 +198,7 @@ public class SoundFrame {
 											ifSoundContinue = true;
 											soundBeginTime = System.currentTimeMillis();
 											soundBeginIndex = beginIndex;
-											System.out.println("soundBeginIndex: " + soundBeginIndex);
+											//System.out.println("soundBeginIndex: " + soundBeginIndex);
 										}
 									} else {
 										if(ifSoundContinue ) {
@@ -205,12 +206,18 @@ public class SoundFrame {
 												ifSoundContinue = false;
 												soundBeginTime = System.currentTimeMillis();
 												int longth = beginIndex - soundBeginIndex;
-												System.out.println("区间：" + longth);
+												//System.out.println("区间：" + longth);
 												if(longth < 0)
 													continue;
 												byte[] bt = new byte[beginIndex - soundBeginIndex];
 												System.arraycopy(bufferAll, beginIndex, bt, 0, beginIndex - soundBeginIndex);
-												SoundUtil.saveSound(bt);
+												String filePath = SoundUtil.saveSound(bt);
+												try {
+													String callRes = XFApi.audioCall(filePath);
+													System.out.println(callRes);
+												} catch (Throwable e) {
+													e.printStackTrace();
+												}
 											} 
 										}
 									}
@@ -248,7 +255,6 @@ public class SoundFrame {
 					}
 				}
 			}.start();
-			new Thread(new CheckSound()).start();
 			// 起线程，监听数据，截取指令
 			new Thread() {
 				@Override

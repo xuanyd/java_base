@@ -24,7 +24,7 @@ public class SoundUtil {
 		return new AudioFormat(encoding, rate, sampleSize, channels, (sampleSize / 8) * channels, rate, bigEndian);
 	}
 
-	public static void saveSound(byte[] bt) {
+	public static String saveSound(byte[] bt) {
 		ByteArrayInputStream bis = new ByteArrayInputStream(bt);
 		AudioFormat af = SoundUtil.getAudioFormat();
 		AudioInputStream ais = new AudioInputStream(bis, af, bt.length / af.getFrameSize());
@@ -51,6 +51,7 @@ public class SoundUtil {
 				e.printStackTrace();
 			}
 		}
+		return file.getAbsolutePath();
 	}
 	
 	public void checkSoundContinue() {

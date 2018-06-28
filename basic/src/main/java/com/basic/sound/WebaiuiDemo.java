@@ -1,4 +1,4 @@
-package com.basic.sound.util;
+package com.basic.sound;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
@@ -13,42 +13,46 @@ import java.net.URL;
 import java.text.ParseException;
 import java.util.HashMap;
 import java.util.Map;
-
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.digest.DigestUtils;
 
 /**
- * @author xuanyandong
- *
+ * AIUI WebAPI V2接口调用示例
+ * 
+ * 运行方法：直接运行 main()
+ * 
+ * 结果： 控制台输出接口返回值信息
+ * 
+ * @author iflytek_aiui
+ * 
  */
-public class XFApi {
-	
+public class WebaiuiDemo {
 	private static final String URL = "http://openapi.xfyun.cn/v2/aiui";
 	private static final String APPID = "5b29c990";
 	private static final String API_KEY = "8d87767697d94e459e210d49ddee7498";
 	private static final String DATA_TYPE = "audio";
 	private static final String SCENE = "main";
 	private static final String SAMPLE_RATE = "16000";
-	private static final String AUTH_ID = "31ef41e0959f9526e7313e89887515d3";
+	private static final String AUTH_ID = "56eba340d1a745fd98d4759989334a5c";
 	private static final String AUE = "raw";
+	private static final String FILE_PATH = "D:\\AudioFile\\1529630254415.wav";
 	// 个性化参数，注意需进行两层转义
-	private static final String PERS_PARAM = "{\"auth_id\":\"31ef41e0959f9526e7313e89887515d3\"}";
-	
-	
-	public static String audioCall(String audioPath) throws Throwable {
+	private static final String PERS_PARAM = "{\\\\\\\"auth_id\\\\\\\":\\\\\\\"31ef41e0959f9526e7313e89887515d3\\\\\\\"}";
+
+	public static void main(String[] args) throws IOException, ParseException, InterruptedException {
 		Map<String, String> header = buildHeader();
-		byte[] dataByteArray = readFile(audioPath);
-		dataByteArray = Base64.encodeBase64(dataByteArray);
+		byte[] dataByteArray = readFile(FILE_PATH);
 		String result = httpPost(URL, header, dataByteArray);
-		System.out.println(result);		
-		return "";
+		System.out.println(result);
 	}
-	
+
 	private static Map<String, String> buildHeader() throws UnsupportedEncodingException, ParseException {
 		String curTime = System.currentTimeMillis() / 1000L + "";
-		String param = "{\"aue\":\""+AUE+"\",\"sample_rate\":\""+SAMPLE_RATE+"\",\"auth_id\":\""+AUTH_ID+"\",\"data_type\":\""+DATA_TYPE+"\",\"scene\":\""+SCENE+"\"}";		
-		//使用个性化参数时参数格式如下：
-		//String param = "{\"aue\":\""+AUE+"\",\"sample_rate\":\""+SAMPLE_RATE+"\",\"auth_id\":\""+AUTH_ID+"\",\"data_type\":\""+DATA_TYPE+"\",\"scene\":\""+SCENE+"\",\"pers_param\":\""+PERS_PARAM+"\"}";
+		String param = "{\"aue\":\"" + AUE + "\",\"sample_rate\":\"" + SAMPLE_RATE + "\",\"auth_id\":\"" + AUTH_ID
+				+ "\",\"data_type\":\"" + DATA_TYPE + "\",\"scene\":\"" + SCENE + "\"}";
+		// 使用个性化参数时参数格式如下：
+		// String param =
+		// "{\"aue\":\""+AUE+"\",\"sample_rate\":\""+SAMPLE_RATE+"\",\"auth_id\":\""+AUTH_ID+"\",\"data_type\":\""+DATA_TYPE+"\",\"scene\":\""+SCENE+"\",\"pers_param\":\""+PERS_PARAM+"\"}";
 		String paramBase64 = new String(Base64.encodeBase64(param.getBytes("UTF-8")));
 		String checkSum = DigestUtils.md5Hex(API_KEY + curTime + paramBase64);
 
@@ -59,7 +63,7 @@ public class XFApi {
 		header.put("X-Appid", APPID);
 		return header;
 	}
-	
+
 	private static byte[] readFile(String filePath) throws IOException {
 		InputStream in = new FileInputStream(filePath);
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
@@ -72,22 +76,22 @@ public class XFApi {
 		in.close();
 		return data;
 	}
-	
+
 	private static String httpPost(String url, Map<String, String> header, byte[] body) {
 		String result = "";
 		BufferedReader in = null;
 		OutputStream out = null;
 		try {
 			URL realUrl = new URL(url);
-			HttpURLConnection connection = (HttpURLConnection)realUrl.openConnection();
+			HttpURLConnection connection = (HttpURLConnection) realUrl.openConnection();
 			for (String key : header.keySet()) {
 				connection.setRequestProperty(key, header.get(key));
 			}
 			connection.setDoOutput(true);
 			connection.setDoInput(true);
-			
-			//connection.setConnectTimeout(20000);
-			//connection.setReadTimeout(20000);
+
+			// connection.setConnectTimeout(20000);
+			// connection.setReadTimeout(20000);
 			try {
 				out = connection.getOutputStream();
 				out.write(body);
@@ -95,7 +99,7 @@ public class XFApi {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			
+
 			try {
 				in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
 				String line;
@@ -109,13 +113,5 @@ public class XFApi {
 			e.printStackTrace();
 		}
 		return result;
-	}
-	
-	public static void main(String[] args) {
-		try {
-			new XFApi().audioCall("D:\\AudioFile\\1529630254415.wav");
-		} catch (Throwable e) {
-			e.printStackTrace();
-		}
 	}
 }
