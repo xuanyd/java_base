@@ -9,7 +9,9 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
+import java.net.InetAddress;
 import java.net.URL;
+import java.net.UnknownHostException;
 import java.text.ParseException;
 import java.util.HashMap;
 import java.util.Map;
@@ -25,8 +27,10 @@ public class XFApi {
 	
 	private static final String URL = "http://openapi.xfyun.cn/v2/aiui";
 	private static final String APPID = "5b29c990";
-	private static final String API_KEY = "8d87767697d94e459e210d49ddee7498";
-	private static final String DATA_TYPE = "text";
+
+	//private static final String API_KEY = "8d87767697d94e459e210d49ddee7498";
+	private static final String API_KEY = "d6328e004592b36ddf310c70ed0bd752";
+	private static final String DATA_TYPE = "audio";
 	private static final String SCENE = "main";
 	private static final String SAMPLE_RATE = "16000";
 	private static final String AUTH_ID = "31ef41e0959f9526e7313e89887515d3";
@@ -58,6 +62,7 @@ public class XFApi {
 		header.put("X-CurTime", curTime);
 		header.put("X-CheckSum", checkSum);
 		header.put("X-Appid", APPID);
+		System.out.println(header);
 		return header;
 	}
 	
@@ -112,7 +117,8 @@ public class XFApi {
 		return result;
 	}
 	
-	public static void main(String[] args) {
+	public static void main(String[] args) throws UnknownHostException {
+		String address = InetAddress.getLocalHost().getHostAddress().toString();
 		try {
 			new XFApi().audioCall("D:\\AudioFile\\1530263606074.wav");
 		} catch (Throwable e) {

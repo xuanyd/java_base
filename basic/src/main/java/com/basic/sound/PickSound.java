@@ -41,7 +41,6 @@ public class PickSound {
 	byte[] buffer = new byte[bufSize];
 
 	TargetDataLine targetDataLine = null;
-	SourceDataLine sourceDataLine = null;
 
 	public PickSound() {
 		number = 600;
@@ -65,21 +64,7 @@ public class PickSound {
 		} catch (LineUnavailableException e) {
 			e.printStackTrace();
 		}
-
 		info = new DataLine.Info(SourceDataLine.class, audioFormat);
-
-		try {
-			sourceDataLine = (SourceDataLine) AudioSystem.getLine(info);
-			sourceDataLine.open(audioFormat);
-			sourceDataLine.start();
-		} catch (LineUnavailableException e) {
-			e.printStackTrace();
-		}
-
-		FloatControl fc = (FloatControl) sourceDataLine.getControl(FloatControl.Type.MASTER_GAIN);
-		double value = 2;
-		float dB = (float) (Math.log(value == 0.0 ? 0.0001 : value) / Math.log(10.0) * 20.0);
-		fc.setValue(dB);
 	}
 
 	public void startPick() {
@@ -100,7 +85,7 @@ public class PickSound {
 								int hBit = bufferAll[beginIndex];
 								int lBit = bufferAll[beginIndex + 1];
 								int abs = Math.abs(hBit) + Math.abs(lBit);
-								if (abs > 130) {
+								if (abs > 80) {
 									if (!ifSoundContinue) {
 										ifSoundContinue = true;
 										soundBeginTime = System.currentTimeMillis();
@@ -157,7 +142,7 @@ public class PickSound {
 				//System.out.println(Arrays.toString(buffer));
 				System.arraycopy(buffer, 0, bufferAll, bufferAllIndex, nByte);
 				bufferAllIndex += nByte;
-				sourceDataLine.write(buffer, 0, nByte);
+				//sourceDataLine.write(buffer, 0, nByte);
 			}
 		}
 	}
