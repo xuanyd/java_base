@@ -153,8 +153,8 @@ public class PickSound {
 		while (nByte != -1) {
 			synchronized (bufferAll) {
 				nByte = targetDataLine.read(buffer, 0, bufSize);
-				System.out.println("实际读取：" + nByte);
-				System.out.println(Arrays.toString(buffer));
+				//System.out.println("实际读取：" + nByte);
+				//System.out.println(Arrays.toString(buffer));
 				System.arraycopy(buffer, 0, bufferAll, bufferAllIndex, nByte);
 				bufferAllIndex += nByte;
 				sourceDataLine.write(buffer, 0, nByte);

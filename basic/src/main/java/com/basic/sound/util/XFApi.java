@@ -26,7 +26,7 @@ public class XFApi {
 	private static final String URL = "http://openapi.xfyun.cn/v2/aiui";
 	private static final String APPID = "5b29c990";
 	private static final String API_KEY = "8d87767697d94e459e210d49ddee7498";
-	private static final String DATA_TYPE = "audio";
+	private static final String DATA_TYPE = "text";
 	private static final String SCENE = "main";
 	private static final String SAMPLE_RATE = "16000";
 	private static final String AUTH_ID = "31ef41e0959f9526e7313e89887515d3";
@@ -39,6 +39,7 @@ public class XFApi {
 		Map<String, String> header = buildHeader();
 		byte[] dataByteArray = readFile(audioPath);
 		dataByteArray = Base64.encodeBase64(dataByteArray);
+		//byte[] textArray = Base64.encodeBase6(new String("郑州天气").getBytes());
 		String result = httpPost(URL, header, dataByteArray);
 		System.out.println(result);		
 		return "";
@@ -113,7 +114,7 @@ public class XFApi {
 	
 	public static void main(String[] args) {
 		try {
-			new XFApi().audioCall("D:\\AudioFile\\1529630254415.wav");
+			new XFApi().audioCall("D:\\AudioFile\\1530263606074.wav");
 		} catch (Throwable e) {
 			e.printStackTrace();
 		}
