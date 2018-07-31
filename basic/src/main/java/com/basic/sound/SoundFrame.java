@@ -193,7 +193,7 @@ public class SoundFrame {
 									int hBit = bufferAll[beginIndex];
 									int lBit = bufferAll[beginIndex + 1];
 									int abs = Math.abs(hBit) + Math.abs(lBit);
-									if(abs > 115) {
+									if(abs > 125) {
 										if(!ifSoundContinue) {
 											ifSoundContinue = true;
 											soundBeginTime = System.currentTimeMillis();

@@ -29,7 +29,7 @@ public class XFApi {
 	private static final String APPID = "5b29c990";
 
 	//private static final String API_KEY = "8d87767697d94e459e210d49ddee7498";
-	private static final String API_KEY = "d6328e004592b36ddf310c70ed0bd752";
+	private static final String API_KEY = "8d87767697d94e459e210d49ddee7498";
 	private static final String DATA_TYPE = "audio";
 	private static final String SCENE = "main";
 	private static final String SAMPLE_RATE = "16000";
@@ -120,7 +120,7 @@ public class XFApi {
 	public static void main(String[] args) throws UnknownHostException {
 		String address = InetAddress.getLocalHost().getHostAddress().toString();
 		try {
-			new XFApi().audioCall("D:\\AudioFile\\1530263606074.wav");
+			new XFApi().audioCall("D:\\AudioFile\\zztq.mp3");
 		} catch (Throwable e) {
 			e.printStackTrace();
 		}

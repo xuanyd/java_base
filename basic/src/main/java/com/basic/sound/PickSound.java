@@ -10,6 +10,7 @@ import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.SourceDataLine;
 import javax.sound.sampled.TargetDataLine;
 
+import com.basic.sound.util.BaiduAPI;
 import com.basic.sound.util.SoundUtil;
 import com.basic.sound.util.XFApi;
 
@@ -85,7 +86,7 @@ public class PickSound {
 								int hBit = bufferAll[beginIndex];
 								int lBit = bufferAll[beginIndex + 1];
 								int abs = Math.abs(hBit) + Math.abs(lBit);
-								if (abs > 80) {
+								if (abs > 125) {
 									if (!ifSoundContinue) {
 										ifSoundContinue = true;
 										soundBeginTime = System.currentTimeMillis();
@@ -106,7 +107,8 @@ public class PickSound {
 													beginIndex - soundBeginIndex);
 											String filePath = SoundUtil.saveSound(bt);
 											try {
-												String callRes = XFApi.audioCall(filePath);
+												//String callRes = XFApi.audioCall(filePath);
+												String callRes = BaiduAPI.request(filePath);
 												System.out.println(callRes);
 											} catch (Throwable e) {
 												e.printStackTrace();
